@@ -5,7 +5,7 @@ import (
 	"errors"
 	su "git.woda.ink/woda/common/service_util" //实际引入路径为"git.woda.ink/woda/common/service_util"，请先go get安装
 	pb "git.woda.ink/woda/pb/MyFirstMicroservice"
-	pbdb "git.woda.ink/woda/pb/DBHelper"
+	//pbdb "git.woda.ink/woda/pb/DBHelper"
 	log "github.com/xiaomi-tc/log15"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -40,25 +40,25 @@ func main() {
 		//最后关闭服务
 		defer connService.Close()
 		//test1 : DB Interface
-		c := pb.NewMyFirstMicroserviceClient(connService)
-		req := new(pbdb.DBHelperRequest)
-		req.ExeType = pbdb.SqlExcuteType_SELECT
-		req.SqlCMD = "WD_RCUT_GetContactList"
-		r, err := c.WD_MFMS_ShowDB(context.Background(), &pbaas.InvokeServiceRequest{})
-		if err != nil{
-			log.Error("could not DBExecute: %v", err)
-		}else{
-			logx.Printf("ServiceResponseData: %s", r.GetServiceResponseData())
-		}
-
-		//test2 : Consul interface
 		//c := pb.NewMyFirstMicroserviceClient(connService)
-		//r, err := c.WD_MFMS_ShowAllMicroservicesOnConsul(context.Background(), &pbaas.InvokeServiceRequest{})
+		//req := new(pbdb.DBHelperRequest)
+		//req.ExeType = pbdb.SqlExcuteType_SELECT
+		//req.SqlCMD = "WD_RCUT_GetContactList"
+		//r, err := c.WD_MFMS_ShowDB(context.Background(), &pbaas.InvokeServiceRequest{})
 		//if err != nil{
-		//	log.Error("Show service on consul error: %v", err)
+		//	log.Error("could not DBExecute: %v", err)
 		//}else{
 		//	logx.Printf("ServiceResponseData: %s", r.GetServiceResponseData())
 		//}
+
+		//test2 : Consul interface
+		c := pb.NewMyFirstMicroserviceClient(connService)
+		r, err := c.WD_MFMS_ShowAllMicroservicesOnConsul(context.Background(), &pbaas.InvokeServiceRequest{})
+		if err != nil{
+			log.Error("Show service on consul error: %v", err)
+		}else{
+			logx.Printf("ServiceResponseData: %s", r.GetServiceResponseData())
+		}
 	}
 
 }

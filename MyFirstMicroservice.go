@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc"
 	"errors"
 	"strconv"
+	"github.com/hashicorp/consul/api"
 )
 
 type Server struct{}
@@ -32,7 +33,18 @@ func (s *Server) WD_MFMS_ShowAllMicroservicesOnConsul(ctx context.Context, in *A
 		}
 		out.ServiceResponseData += "\n"
 	}
-
+	chks,err :=su.GetServicesHealthyState(api.HealthAny)
+	out.ServiceResponseData = "\n"
+	for _,v:= range chks{//map[i]
+			out.ServiceResponseData += v.Status +": " + v.CheckID + "\n"
+			//out.ServiceResponseData += v.ServiceName + "2\n"
+			//out.ServiceResponseData += v.Status + "3\n"
+			//out.ServiceResponseData += v.ServiceTags[0] + "\n"
+			//out.ServiceResponseData += v.ServiceID + "\n"
+			//out.ServiceResponseData += v.Notes + "\n"
+			//out.ServiceResponseData += v.Node + "\n"
+			//out.ServiceResponseData += v.Name + "\n"
+	}
 	if err != nil {
 		return &AASMessage.InvokeServiceResponse{err.Error()}, nil
 	}
