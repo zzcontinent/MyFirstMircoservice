@@ -1,0 +1,3 @@
+DBHelperIP: localhost
+LogPath: /var/log/
+port: 30000
